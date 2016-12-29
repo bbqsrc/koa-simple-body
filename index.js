@@ -3,28 +3,24 @@
 const parsers = require("./parsers")
 
 const types = {
-  multipart: [
-    'multipart/form-data'
-  ],
-  urlEncoded: [
-    'application/x-www-form-urlencoded'
-  ],
+  multipart: "multipart/form-data",
+  urlEncoded: "application/x-www-form-urlencoded",
   json: [
-    'application/json',
-    'application/json-patch+json',
-    'application/vnd.api+json',
-    'application/csp-report'
-  ],
-  text: [
-    'text/*'
+    "application/json",
+    "application/json-patch+json",
+    "application/vnd.api+json",
+    "application/csp-report"
   ],
   buffer: [
-    'text/*'
+    "text/*"
   ]
 }
 
-function parse(ctx, opts) {
+function parseBody(ctx, opts) {
   const options = opts || {}
+
+  ctx.request.fields = {}
+  ctx.request.files = {}
 
   // JSON
   if (ctx.request.is(types.json)) {
@@ -49,26 +45,34 @@ function parse(ctx, opts) {
   }
 
   // Buffer
-  if (options.buffer && ctx.request.is(types.buffer)) {
+  if (options.useBuffer && ctx.request.is(types.buffer)) {
     return parsers.buffer(ctx, options.buffer).then(body => {
       ctx.request.body = body
     })
   }
 
-  // Text
-  if (ctx.request.is(types.text)) {
-    return parsers.text(ctx, options.text).then(text => {
-      ctx.request.body = text
-    })
-  }
-
-  // Unhandled, skip
-  return Promise.resolve()
+  // Fallback to text
+  return parsers.text(ctx, options.text).then(text => {
+    ctx.request.body = text
+  })
 }
 
 function middleware(options) {
   return (ctx, next) => {
-    parse(ctx, options).then(next)
+    const method = ctx.method.toUpperCase()
+
+    const canHaveBody = (
+      method === "POST" ||
+      method === "PUT" ||
+      method === "PATCH" ||
+      method === "OPTIONS"
+    )
+
+    if (!canHaveBody) {
+      return next()
+    }
+
+    return parseBody(ctx, options).then(next)
   }
 }
 

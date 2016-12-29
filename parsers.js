@@ -9,13 +9,13 @@ function text(ctx, limit) {
 
   return rawBody(ctx.req, {
     limit: limit || "100kb",
-    length: ctx.length,
+    length: ctx.request.length,
     encoding: "utf8"
   })
 }
 
 function json(ctx, limit) {
-  if (!ctx.length) {
+  if (!ctx.request.length) {
     return Promise.resolve()
   }
 
@@ -37,15 +37,15 @@ function json(ctx, limit) {
 }
 
 function urlEncoded(ctx, limit) {
-  if (!ctx.length) {
+  if (!ctx.request.length) {
     return Promise.resolve()
   }
 
-  return this.text(ctx, limit).then(t => {
+  return text(ctx, limit).then(t => {
     try {
       return qs.parse(text)
     } catch (err) {
-      this.ctx.throw(400, "invalid urlencoded received")
+      ctx.throw(400, "invalid urlencoded received")
     }
   })
 }
@@ -55,7 +55,7 @@ function buffer(ctx, limit) {
 
   return rawBody(ctx.req, {
     limit: limit || "1mb",
-    length: ctx.length
+    length: ctx.request.length
   })
 }
 
@@ -79,8 +79,6 @@ function _writeContinue(ctx) {
     ctx.res.writeContinue()
     ctx._checkedContinue = true
   }
-
-  return ctx
 }
 
 module.exports = {

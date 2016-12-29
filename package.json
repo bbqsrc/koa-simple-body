@@ -1,15 +1,21 @@
 {
   "name": "koa-simple-body",
   "version": "0.1.0",
-  "description": "",
+  "description": "A clean body parser for Koa v2",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Brendan Molloy <brendan@bbqsrc.net> (https://brendan.so/)",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "formidable": "^1.0.17",
     "raw-body": "^2.1.7"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "koa": "^2.0.0",
+    "mocha": "^3.2.0",
+    "supertest": "^2.0.1"
   }
 }
