@@ -1,0 +1,15 @@
+{
+  "name": "koa-simple-body",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brendan Molloy <brendan@bbqsrc.net> (https://brendan.so/)",
+  "license": "ISC",
+  "dependencies": {
+    "formidable": "^1.0.17",
+    "raw-body": "^2.1.7"
+  }
+}
