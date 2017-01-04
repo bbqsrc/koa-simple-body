@@ -1,6 +1,6 @@
 "use strict";
 
-const parsers = require("./parsers")
+const parsers = require("./lib/parsers")
 
 const types = {
   multipart: "multipart/form-data",
