@@ -1,6 +1,6 @@
 {
   "name": "koa-simple-body",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A clean body parser for Koa v2",
   "main": "index.js",
   "scripts": {
